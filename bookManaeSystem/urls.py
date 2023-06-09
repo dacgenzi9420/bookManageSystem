@@ -24,5 +24,6 @@ urlpatterns = [
     re_path('books/$',views.BookView.as_view()),
     re_path('addbooks/$',views.BookView.as_view()),
     re_path('delbooks/$',views.BookView.as_view()),
-    re_path('updatebooks/$',views.update),
+    re_path('updatebooks/$',views.update11),
+    re_path('records/$',views.RecordView.as_view())
 ]

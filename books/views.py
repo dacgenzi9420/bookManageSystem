@@ -5,7 +5,7 @@ from django.http import HttpResponse,JsonResponse
 from django.views import View
 from django.contrib.auth import login,logout,authenticate
 
-from books.models import Books
+from books.models import Books,Record
 
 
 # Create your views here.
@@ -76,7 +76,7 @@ class BookView(View):
             return JsonResponse({'code':200,'msg':'success'})
 
     """修改图书信息"""
-def update(request):
+def update11(request):
     if not request.user.is_authenticated:
         return JsonResponse({'code': 8006, 'msg': '未登录'})
     if request.method == 'POST':
@@ -85,13 +85,20 @@ def update(request):
         name = params.get('name')
         status = params.get('status')
         bookInfo = Books.objects.get(id=id)
+        print(bookInfo)
         bookInfo.name = name
         bookInfo.status = status
         bookInfo.save()
         return JsonResponse({'code':200,'msg':'success'})
 
 class RecordView(View):
-    """获取所有图书的记录"""
-    def get(self,request):
+    def post(self,request):
         if not request.user.is_authenticated:
             return JsonResponse({'code':8006,'msg':'未登录'})
+        params = request.POST if len(request.POST) > 0 else json.loads(request.POST.decode())
+        book_name = params.get('book')
+        book_info = Books.objects.get(name=book_name)
+        if book_info.status == 1:
+            return JsonResponse({'code':200,'msg':'可借'})
+        else:
+            return JsonResponse('error')
